@@ -1,0 +1,8 @@
+.vs
+/ADOtutorial/Common/bin/Debug/netcoreapp2.2
+/ADOtutorial/Common/obj
+/ADOtutorial/ADOtutorial/bin/Debug/netcoreapp2.2
+/ADOtutorial/ADOtutorial/obj
+/ADOtutorial/DataLayer/obj
+/ADOtutorial/EmployeeManagement/bin/Debug/netcoreapp2.2
+/ADOtutorial/EmployeeManagement/obj
