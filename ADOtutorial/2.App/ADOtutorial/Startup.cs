@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Common;
+using Common.Contracts;
+using EmployeeDataManagement;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -20,6 +23,8 @@ namespace ADOtutorial
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            services.AddSingleton<IDataConnection, DataConnection>();
+            services.AddSingleton<IEmployeeDbManager, EmployeeDataManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

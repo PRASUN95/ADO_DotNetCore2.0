@@ -1,4 +1,5 @@
 ﻿using Common;
+using Common.Contracts;
 using Common.Model;
 using System;
 using System.Collections.Generic;
@@ -9,15 +10,13 @@ namespace EmployeeDataManagement
 {
     public class EmployeeDataManager : IEmployeeDbManager
     {
-        private readonly string _connectionStr;
-
+        private readonly IDataConnection _dbConnection;
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="connectionStr"></param>
-        public EmployeeDataManager(string connectionStr)
+        public EmployeeDataManager(IDataConnection dbConnection)
         {
-            _connectionStr = connectionStr;
+            _dbConnection = dbConnection;
         }
 
         /// <summary>
@@ -28,10 +27,9 @@ namespace EmployeeDataManagement
         {
             List<Employee> employees = new List<Employee>();
             string responseCode = string.Empty;
-            DataConnection db = new DataConnection(_connectionStr);
             try
             {
-                using (SqlCommand cmd = new SqlCommand("P_GET_ALL_EMPLOYEE", db.getConn()))
+                using (SqlCommand cmd = new SqlCommand("P_GET_ALL_EMPLOYEE", _dbConnection.getConn()))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@Id",0);
@@ -72,8 +70,7 @@ namespace EmployeeDataManagement
         public Employee GetEmployee(string Id)
         {
             Employee employee = null;
-            DataConnection db = new DataConnection(_connectionStr);
-            using (SqlCommand cmd = new SqlCommand("Select * from Employee where Id = @Id", db.getConn()))
+            using (SqlCommand cmd = new SqlCommand("Select * from Employee where Id = @Id", _dbConnection.getConn()))
             {
                 cmd.CommandType = CommandType.Text;
                 cmd.Parameters.Add(new SqlParameter("Id", Id));

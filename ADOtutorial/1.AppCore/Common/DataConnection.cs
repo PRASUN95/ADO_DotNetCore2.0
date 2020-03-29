@@ -1,21 +1,20 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Common.Contracts;
+using Microsoft.Extensions.Configuration;
 using System.Data.SqlClient;
 using System.IO;
 
 namespace Common
 {
-    public class DataConnection
+    public class DataConnection : IDataConnection
     {
+        private readonly IConfiguration _configuration;
+
         public string sqlConnectionString { get; set; }
 
-        public DataConnection(string connectionString)
+        public DataConnection(IConfiguration configuration)
         {
-            var configurationBuilder = new ConfigurationBuilder();
-            var path = Path.Combine(Directory.GetCurrentDirectory(), "appsettings.Development.json");
-            configurationBuilder.AddJsonFile(path,false);
-            var root = configurationBuilder.Build();
-            var appSetting = root.GetSection("ConnectionString");
-            sqlConnectionString = appSetting.Value;
+            _configuration = configuration;
+            sqlConnectionString = _configuration.GetSection("ConnectionString").Value;
         }
 
         public SqlConnection getConn()
@@ -23,10 +22,6 @@ namespace Common
             SqlConnection sqlConnection = new SqlConnection(sqlConnectionString);
             sqlConnection.Open();
             return sqlConnection;
-        }
-        public void LogException()
-        {
-
         }
     }
 }

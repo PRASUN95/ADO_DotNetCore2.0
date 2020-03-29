@@ -6,21 +6,20 @@ namespace ADOtutorial.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IEmployeeDbManager employeeDbManager;
+        private readonly IEmployeeDbManager _employeeDbManager;
 
-        public HomeController()
+        public HomeController(IEmployeeDbManager employeeDbManager)
         {
-            employeeDbManager = new EmployeeDataManager(Startup.ConnectionString);
+            _employeeDbManager = employeeDbManager;
         }
         public JsonResult Index()
         {
-            return Json(employeeDbManager.getAllEmployee());
+            return Json(_employeeDbManager.getAllEmployee());
         }
 
         public ActionResult GetEmployee(string Id)
         {
-            EmployeeDataManager employeeDataManager = new EmployeeDataManager(Startup.ConnectionString);
-            return Json(employeeDataManager.GetEmployee(Id));
+            return Json(_employeeDbManager.GetEmployee(Id));
         }
     }
 }
