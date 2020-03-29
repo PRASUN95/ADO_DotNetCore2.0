@@ -57,6 +57,14 @@ namespace EmployeeDataManagement
             catch (Exception e)
             {
                 e.ToString();
+                AppException appException = new AppException()
+                {
+                    ExceptionMessage = e.ToString(),
+                    Machine = System.Environment.MachineName,
+                    LogType = "Error",
+                    Module = "EmployeeDataManager"
+                };
+                _dbConnection.LogException(appException);
             }
             Respone respone = new Respone()
             {

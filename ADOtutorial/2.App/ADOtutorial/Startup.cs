@@ -11,15 +11,10 @@ namespace ADOtutorial
 {
     public class Startup
     {
-        private readonly IConfiguration _configuration;
-
-        public static string ConnectionString { get; set; }
-
-        public Startup(IConfiguration configuration)
-        {
-            _configuration = configuration;
-        }
-        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
@@ -34,7 +29,6 @@ namespace ADOtutorial
             {
                 app.UseDeveloperExceptionPage();
             }
-            ConnectionString = _configuration["ConnectionString"];
             app.UseMvcWithDefaultRoute();
             app.Run(async (context) =>
             {
