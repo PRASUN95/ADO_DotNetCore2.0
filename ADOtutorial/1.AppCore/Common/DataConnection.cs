@@ -1,6 +1,7 @@
 ﻿using Common.Contracts;
 using Common.Model;
 using Microsoft.Extensions.Configuration;
+using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
@@ -24,6 +25,8 @@ namespace Common
         {
             _configuration = configuration;
             sqlConnectionString = _configuration.GetSection("ConnectionString").Value;
+            var sb = new SqlConnectionStringBuilder(sqlConnectionString);
+            sqlConnectionString = Convert.ToString(sb);
         }
 
         /// <summary>
