@@ -1,0 +1,71 @@
+﻿@*@model ADOtutorial.ViewModel.EmployeeViewModel*@
+    <html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <title></title>
+        <script>
+            function DeleteEmployee(Id)
+            {
+                debugger
+                $.ajax({
+                    url: '/Home/Delete',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: { id: Id },
+                    success: function (data) {
+                        alert(data);
+                    },
+                    error: function (error) {
+                        console.log(error);
+                        alert('error');
+                    }
+                });
+            }
+        </script>
+    </head>
+    <body>
+        @*<form action ="/Delete" method="post">
+            @{
+                foreach (var ob in ViewBag.employeeData)
+                {
+                    <div>@ob.Id</div>
+                    <div>@ob.Name</div>
+                    <div>@ob.Email</div>
+                    <div>@ob.Department</div>
+                    <input type="hidden" name="Id" id ="Id" value= @ob.Id />
+                    <input type="submit" value="Delete"/>
+                    @*<div><button id="delete" value=@ob.Id onclick="DeleteEmployee(this.value)">Delete</button></div>
+                }
+            }
+        </form>
+        *@
+
+        @using (Html.BeginForm("Delete", "Home"))
+        {
+                foreach (var ob in ViewBag.employeeData)
+                {
+                    <div>@ob.Id</div>
+                    <div>@ob.Name</div>
+                    <div>@ob.Email</div>
+                    <div>@ob.Department</div>
+                    <input type="hidden" name="Id" id ="Id" value= @ob.Id />
+                    <input type="submit" value="Delete"/>
+                }
+        }
+    @*<form asp-controller="Manage" asp-action="ChangePassword" method="post">
+                        ...
+                    </form>
+
+            @using (Html.BeginForm("ChangePassword", "Manage"))
+            {
+                ...
+            }
+
+    <form asp-action="Index" asp-controller="Form">
+        <label asp-for="FirstName"></label>
+        <input asp-for="FirstName" placeholder="Your name goes here"/>
+        <input type="submit" />
+    </form>
+    *@
+    </body>
+</html>

@@ -1,6 +1,8 @@
-﻿using EmployeeDataManagement;
+﻿using Common.Model;
+using EmployeeDataManagement;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ADOtutorial.Controllers
 {
@@ -12,14 +14,22 @@ namespace ADOtutorial.Controllers
         {
             _employeeDbManager = employeeDbManager;
         }
-        public JsonResult Index()
+        public async Task<IActionResult> Index()
         {
-            return Json(_employeeDbManager.getAllEmployee());
+            var respone = await _employeeDbManager.getAllEmployee();
+            ViewBag.employeeData = respone.Data;
+            return View();
         }
-
-        public ActionResult GetEmployee(string Id)
+        public async Task<ActionResult> GetEmployee(string Id)
         {
-            return Json(_employeeDbManager.GetEmployee(Id));
+            return Json(await _employeeDbManager.GetEmployee(Id));
+        }
+        [HttpPost,ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<Respone> DeleteEmp(string Id)
+        {
+            var res = await _employeeDbManager.DeleteEmployee(Id);
+            return res;
         }
     }
 }

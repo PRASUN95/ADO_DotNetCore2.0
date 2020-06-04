@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Threading.Tasks;
 
 namespace EmployeeDataManagement
 {
@@ -19,11 +20,38 @@ namespace EmployeeDataManagement
             _dbConnection = dbConnection;
         }
 
+        public async Task<Respone> DeleteEmployee(string Id)
+        {
+            string responseCode = "";
+            try
+            {
+                using (SqlCommand cmd = new SqlCommand("P_Delete_Employee", _dbConnection.getConn()))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@Id", Convert.ToInt32(Id));
+                    SqlParameter outputParameter = new SqlParameter("@ResponseCode", SqlDbType.VarChar, 10);
+                    outputParameter.Direction = ParameterDirection.Output;
+                    cmd.Parameters.Add(outputParameter);
+                    int res = await cmd.ExecuteNonQueryAsync();
+                    responseCode = outputParameter.Value.ToString();
+                }
+            }
+            catch (Exception e)
+            {
+
+                throw;
+            }
+            return new Respone()
+            {
+                Code = responseCode
+            };
+        }
+
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        public Respone getAllEmployee()
+        public async Task<Respone> getAllEmployee()
         {
             List<Employee> employees = new List<Employee>();
             string responseCode = string.Empty;
@@ -36,7 +64,7 @@ namespace EmployeeDataManagement
                     SqlParameter outputParameter = new SqlParameter("@ResponseCode", SqlDbType.VarChar,10);
                     outputParameter.Direction = ParameterDirection.Output;
                     cmd.Parameters.Add(outputParameter);
-                    SqlDataReader reader = cmd.ExecuteReader();
+                    SqlDataReader reader = await cmd.ExecuteReaderAsync();
                     while (reader.Read())
                     {
                         employees.Add
@@ -75,14 +103,14 @@ namespace EmployeeDataManagement
         }
 
 
-        public Employee GetEmployee(string Id)
+        public async Task<Employee> GetEmployee(string Id)
         {
             Employee employee = null;
             using (SqlCommand cmd = new SqlCommand("Select * from Employee where Id = @Id", _dbConnection.getConn()))
             {
                 cmd.CommandType = CommandType.Text;
                 cmd.Parameters.Add(new SqlParameter("Id", Id));
-                SqlDataReader reader = cmd.ExecuteReader();
+                SqlDataReader reader = await cmd.ExecuteReaderAsync();
                 while (reader.Read())
                 {
                     employee = new Employee()
